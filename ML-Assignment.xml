@@ -1,0 +1,254 @@
+<export><workspace name="ML-Assignment"><query name="DataLoad" focus="false" listorder="1" taborder="1" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:	Insert the document into the MarkLogic.
+	Insert document into the “Shipment” Collection
+:)
+declare variable $collection :="Shipments";
+
+for $d in xdmp:filesystem-directory("C:\Users\Soham Banerjee\makrlogicAssignment")//dir:entry
+return xdmp:document-load($d//dir:pathname,
+  &lt;options xmlns="xdmp:document-load"&gt;
+    &lt;uri&gt;/data/{fn:string($d//dir:filename)}&lt;/uri&gt;
+    &lt;collections&gt; &lt;collection&gt;{fn:string($collection)}&lt;/collection&gt; &lt;/collections&gt;
+  &lt;/options&gt;
+  )
+
+xdmp:document-delete("/data/data1.xml");
+xdmp:document-delete("/data/data2.xml");
+xdmp:document-delete("/data/data3.xml");
+xdmp:document-delete("/data/Untitled-1.xml");</query><query name="FLWOR1" focus="false" listorder="2" taborder="2" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write FLWOR query to get all the order details form Shipment Collection.:)
+xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+for $i in /shpd:shipmentdetail/shpd:shipment-order-details/shpd:order-details
+return
+   $i
+</query><query name="FLWOR2" focus="false" listorder="3" taborder="3" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:	Write FLWOR query to get all the order details from shipment where order amount is more than 10000.:)
+xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+for $i in /shpd:shipmentdetail/shpd:shipment-order-details
+where $i/shpd:order-amount &gt; 10000
+return 
+  $i/shpd:order-details
+</query><query name="FLWOR3" focus="false" listorder="4" taborder="4" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:	Write FLWOR query to get all the order id and item id and item description where item weight is less than 1 Kg.:)
+xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+
+for $i in /shpd:shipmentdetail/shpd:shipment-order-details
+let $order-id := $i/shpd:orderid/text() 
+let $item-id := $i/shpd:order-details/shpd:itemid/text()
+let $item-description := $i/shpd:order-details/shpd:item-description/text()
+
+where $i/shpd:order-details/shpd:item-weight &lt; 1
+return 
+ &lt;summery&gt; { ("orderId : ", $order-id, " itemId : ", $item-id, " ItemDescription : ", $item-description)}   &lt;/summery&gt;</query><query name="FLWOR3-Different approach" focus="false" listorder="5" taborder="5" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+
+for $i in /shpd:shipmentdetail/shpd:shipment-order-details
+let $order-id := $i/shpd:orderid/text() 
+let $item-id := $i/shpd:order-details/shpd:itemid/text()
+let $item-description := $i/shpd:order-details/shpd:item-description/text()
+
+where $i/shpd:order-details/shpd:item-weight &lt; 1
+return 
+ &lt;results&gt; 
+ &lt;order-id&gt;{$order-id}&lt;/order-id&gt;
+ &lt;item-id&gt;{$item-id}&lt;/item-id&gt;
+ &lt;item-description&gt;{$item-description}&lt;/item-description&gt;
+ &lt;/results&gt;</query><query name="FLWOR4" focus="false" listorder="6" taborder="6" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write FLWOR query to get all the item details sorted by item price.:)
+xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+
+for $i in /shpd:shipmentdetail/shpd:shipment-order-details/shpd:order-details
+let $price :=  xs:double($i/shpd:item-price/text())
+order by $price 
+return 
+$i
+</query><query name="FLWOR5" focus="false" listorder="7" taborder="7" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write FLWOR query to get all the item details sorted by item price.:)
+xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+declare namespace functx = "http://www.functx.com";
+
+for $i in /shpd:shipmentdetail/shpd:shipment-order-details
+let $delivery-date := xs:dateTime($i/shpd:order-delivery-datetime/text())
+let $current-date := fn:current-dateTime()
+where $delivery-date le $current-date and $delivery-date ge (fn:current-dateTime() - xs:dayTimeDuration("P2D"))
+return 
+$i/shpd:order-details</query><query name="FLWOR5" focus="false" listorder="8" taborder="8" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write FLWOR query to get shipment id, order Id and status for all the documents.:)
+xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+for $i in /shpd:shipmentdetail
+let $shipment-id :=$i/shpd:shipment-id/text() 
+let $order-id := $i/shpd:shipment-order-details/shpd:orderid/text() 
+let $shipment-status := $i/shpd:shipment-status/string()
+let $order-status := $i/shpd:shipment-order-details/shpd:order-status/text()
+let $item-status := $i/shpd:shipment-order-details/shpd:order-details/shpd:item-status/text()
+
+return 
+ &lt;results&gt; 
+ &lt;shipment-id&gt;{$shipment-id}&lt;/shipment-id&gt;
+ &lt;order-ids&gt;{$order-id}&lt;/order-ids&gt;
+ &lt;shipment-status&gt;{$shipment-status}&lt;/shipment-status&gt;
+ &lt;order-status&gt;{$order-status}&lt;/order-status&gt;
+ &lt;item-status&gt;{$item-status}&lt;/item-status&gt;
+ &lt;/results&gt;
+</query><query name="FLWOR6" focus="false" listorder="9" taborder="9" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write FLWOR query to get shipment Id and count of all the order available in that shipment.:)
+xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+for $i in /shpd:shipmentdetail
+let $shipment-id :=$i/shpd:shipment-id/text() 
+let $order-count := $i/shpd:shipment-order-details/shpd:order-count/text() 
+
+return 
+  &lt;result&gt; 
+      &lt;shipment-id&gt; {$shipment-id} &lt;/shipment-id&gt;
+      &lt;order-count&gt; {$order-count} &lt;/order-count&gt;
+  &lt;/result&gt;</query><query name="FLWOR7" focus="false" listorder="10" taborder="10" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">
+(:Write FLWOR query to get shipment Id and count of all the order available in that shipment which are delivered.:)
+xquery version "1.0-ml";
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+
+for $i in /shpd:shipmentdetail
+let $shipment-id :=$i/shpd:shipment-id/text() 
+let $order-count := $i/shpd:shipment-order-details/shpd:order-count/text() 
+
+let $order-status := $i/shpd:shipment-order-details/shpd:order-status/string()
+where $order-status = "Order delivered"
+return 
+   &lt;result&gt; 
+      &lt;shipment-id&gt; {$shipment-id} &lt;/shipment-id&gt;
+      &lt;order-count&gt; {$order-count} &lt;/order-count&gt;
+  &lt;/result&gt;</query><query name="FLWOR8" focus="false" listorder="11" taborder="2" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write FLWOR query to get shipment id, and count of order
+which have same Order Delivery Address.
+:)
+xquery version "1.0-ml";
+
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+
+
+let $del-address := fn:distinct-values((/shpd:shipmentdetail/shpd:shipment-order-details/shpd:order-delivery-address/text()))
+for $i in $del-address
+ let $count := fn:count(/shpd:shipmentdetail/shpd:shipment-order-details/shpd:order-delivery-address[.=$i])
+return
+for $j in /shpd:shipmentdetail
+      let $shipid := $j/shpd:shipment-id/text()
+      let $ord-count := $j/shpd:shipment-order-details/shpd:order-count/text()
+      let $address := $j/shpd:shipment-order-details/shpd:order-delivery-address/text()
+ return 
+   for $k in $count
+   return 
+     if ( $address eq $i and $k &gt; 1)
+ then 
+      &lt;result&gt;
+            &lt;shipmentid&gt; {$shipid} &lt;/shipmentid&gt;
+            &lt;ordcount&gt; {$ord-count} &lt;/ordcount&gt;
+      &lt;/result&gt;
+    
+ else()
+ </query><query name="Function2" focus="false" listorder="12" taborder="2" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write a Function to convert input datetime into UTC datetime.:)
+xquery version "1.0-ml";
+
+declare function local:changetoutc( $datetime as xs:dateTime) as xs:dateTime
+{
+fn:adjust-dateTime-to-timezone($datetime, xs:dayTimeDuration("PT0H"))
+
+};
+
+let $date := xs:dateTime("2022-05-17T10:45:09.37975+05:30")
+return
+local:changetoutc($date)
+</query><query name="Query 17" focus="false" listorder="13" taborder="3" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">xquery version "1.0-ml";
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+declare namespace functx = "http://www.functx.com";
+
+for $i in /shpd:shipmentdetail/shpd:shipment-order-details
+let $delivery-date := $i/shpd:order-delivery-datetime/text()
+let $current-date := fn:current-dateTime()
+return $delivery-date</query><query name="Query 18" focus="true" listorder="14" taborder="4" active="true" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">xquery version "1.0-ml";
+
+
+declare namespace shpd="http://www.marlogicassignment.com/shipmentdetail";
+
+
+let $del-address := fn:distinct-values((/shpd:shipmentdetail/shpd:shipment-order-details/shpd:order-delivery-address/text()))
+for $i in $del-address
+ let $count := fn:count(/shpd:shipmentdetail/shpd:shipment-order-details/shpd:order-delivery-address[.=$i])
+return
+for $j in /shpd:shipmentdetail
+      let $shipid := $j/shpd:shipment-id/text()
+      let $ord-count := $j/shpd:shipment-order-details/shpd:order-count/text()
+      let $address := $j/shpd:shipment-order-details/shpd:order-delivery-address/text()
+ return 
+   for $k in $count
+   return 
+     if ( $address eq $i and $k &gt; 1)
+ then 
+      &lt;result&gt;
+            &lt;shipmentid&gt; {$shipid} &lt;/shipmentid&gt;
+            &lt;ordcount&gt; {$ord-count} &lt;/ordcount&gt;
+      &lt;/result&gt;
+    
+ else()
+ 
+    
+        
+     
+     
+      
+      
+
+   
+
+   
+  
+</query><query name="Function1" focus="false" listorder="15" taborder="3" active="false" database="4817053641539293309" server="4513902522097204932" database-name="shipment" server-name="App-Services" mode="xquery" optimize="1">(:Write a Function which return Interval For given input start datetime, end datetime and interval duration.:)
+
+xquery version "1.0-ml";
+
+
+declare function local:interval($strt as xs:dateTime, $end as xs:dateTime, $interval as xs:string,$inc as xs:int)
+{  
+ 
+
+&lt;intervals&gt;{ 
+      
+      if ( $strt + xs:dayTimeDuration(xs:duration($interval)) eq $end)
+      then  
+      ( 
+        &lt;interval attr= "{$inc}"&gt;
+         &lt;startdatetime&gt;{$strt}&lt;/startdatetime&gt;
+         &lt;enddatetime&gt;{$end}&lt;/enddatetime&gt;
+        &lt;/interval&gt;
+      )
+      
+      else
+         (let $s := $strt
+         let $e := ($strt + xs:dayTimeDuration(xs:duration($interval)))
+        
+      return(
+         (&lt;interval attr="{$inc}"&gt;
+           &lt;startdatetime&gt;{$s}&lt;/startdatetime&gt;
+           &lt;enddatetime&gt;{$e}&lt;/enddatetime&gt;
+           &lt;/interval&gt;
+         ),
+         local:interval($e,$end,$interval,$inc+1)))
+         }
+   &lt;/intervals&gt;
+};
+
+let $start := xs:dateTime ("2022-05-17T06:00:00")
+let $endtime := xs:dateTime ("2022-05-17T09:00:00")
+let $interval := "PT1H"
+let $counter:=1
+
+return
+local:interval($start, $endtime, $interval,$counter)
+
+</query></workspace></export>

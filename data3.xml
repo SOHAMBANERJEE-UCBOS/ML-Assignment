@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<shipmentdetail xmlns="http://www.marlogicassignment.com/shipmentdetail">
+
+  <shipment-id> shp-5055 </shipment-id>
+  <shipment-description> ITOrizon Inc. Bangalore </shipment-description>
+
+  <shipment-delivery-address>Bangalore</shipment-delivery-address>
+
+  <shipment-weight unit="kg"> 15  </shipment-weight>
+  <shipment-status>Order delivered</shipment-status>
+  <shipment-created-datetime>2022-05-10T10:46:09.37975+05:30</shipment-created-datetime>
+  <shipment-modified-datetime>2022-05-10T10:46:09.37975+05:30 </shipment-modified-datetime>
+
+  <shipment-order-details id="4">
+
+        <orderid> ordr-20010 </orderid>
+        <order-description> Chairs </order-description>
+        <order-delivery-address>Bangalore</order-delivery-address>
+        <order-delivery-datetime>2022-05-17T11:00:09.37975+05:30</order-delivery-datetime>
+        <order-status>Order delivered</order-status>
+        <order-count> 1 </order-count>
+        <order-amount> 50000 </order-amount>
+
+        <order-details>
+       
+                <itemid> itm-6006 </itemid>
+                <item-description> Chairs</item-description>
+                <item-type> Fragile </item-type>
+                <item-price> 8333 </item-price>
+                <item-status> Order picked </item-status>
+                <item-weight unit="kg"> 2.5 </item-weight>  
+
+        </order-details>
+
+  </shipment-order-details>
+
+
+</shipmentdetail>

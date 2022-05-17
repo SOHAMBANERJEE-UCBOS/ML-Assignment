@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+
+<shipmentdetail xmlns="http://www.marlogicassignment.com/shipmentdetail">
+
+  <shipment-id> shp-1001 </shipment-id>
+  <shipment-description> ITOrizon Inc. Bangalore </shipment-description>
+
+  <shipment-delivery-address>Bangalore</shipment-delivery-address>
+
+  <shipment-weight> 14 Kg. </shipment-weight>
+  <shipment-status>Order in Transit</shipment-status>
+  <shipment-created-datetime> 2022-04-28T10:45:09.37975+05:30 </shipment-created-datetime>
+  <shipment-modified-datetime> 2022-04-28T10:45:09.37975+05:30 </shipment-modified-datetime>
+
+  <shipment-order-details id="1">
+
+        <orderid> ordr-20002 </orderid>
+        <order-description> Monitor </order-description>
+        <order-delivery-address>Bangalore</order-delivery-address>
+        <order-delivery-datetime>2022-05-07T10:45:09.37975+05:30</order-delivery-datetime>
+        <order-status>Order delivered</order-status>
+        <order-count> 3 </order-count>
+        <order-amount> 204000 </order-amount>
+
+        <order-details>
+       
+                <itemid> itm-6006 </itemid>
+                <item-description> LG Monitor</item-description>
+                <item-type> Fragile </item-type>
+                <item-price> 20000 </item-price>
+                <item-status> Out for delivery </item-status>
+                <item-weight unit="kg"> 0.7 </item-weight>                  
+
+        </order-details>
+
+        <order-details>
+       
+                <itemid> itm-4004 </itemid>
+                <item-description> Logitec Wireless mouse </item-description>
+                <item-type> Accessories </item-type>
+                <item-price>200</item-price>
+                <item-status> Order in transit </item-status>
+                <item-weight unit="kg"> 0.150 </item-weight>  
+
+        </order-details>
+
+        <order-details>
+       
+                <itemid> itm-6008 </itemid>
+                <item-description> LG speaker</item-description>
+                <item-type> Fragile </item-type>
+                <item-price> 2000 </item-price>
+                <item-status> Out for delivery </item-status>
+                <item-weight unit="kg"> 0.5 </item-weight>  
+
+        </order-details>
+
+        <itemid> itm-6008 </itemid>
+                <itemid> itm-6007 </itemid>
+                <item-description> LG Mobile</item-description>
+                <item-type> Fragile </item-type>
+                <item-price> 50000 </item-price>
+                <item-status>Delivered</item-status>
+                <item-weight unit="kg"> 0.3 </item-weight>
+
+  </shipment-order-details>
+
+
+
+</shipmentdetail>
