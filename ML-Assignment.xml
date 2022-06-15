@@ -217,7 +217,7 @@ declare function local:interval($strt as xs:dateTime, $end as xs:dateTime, $inte
 {  
  
 
-&lt;intervals&gt;{ 
+
       
       if ( $strt + xs:dayTimeDuration(xs:duration($interval)) eq $end)
       then  
@@ -239,10 +239,10 @@ declare function local:interval($strt as xs:dateTime, $end as xs:dateTime, $inte
            &lt;/interval&gt;
          ),
          local:interval($e,$end,$interval,$inc+1)))
-         }
-   &lt;/intervals&gt;
+     
 };
 
+&lt;intervals&gt;{
 let $start := xs:dateTime ("2022-05-17T06:00:00")
 let $endtime := xs:dateTime ("2022-05-17T09:00:00")
 let $interval := "PT1H"
@@ -250,5 +250,6 @@ let $counter:=1
 
 return
 local:interval($start, $endtime, $interval,$counter)
+}&lt;/intervals&gt;
 
 </query></workspace></export>
